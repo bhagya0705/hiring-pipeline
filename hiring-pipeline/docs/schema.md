@@ -232,8 +232,8 @@ application_interviewers
      │
      │
    User
+```
 
-
-- Which constraints are enforced by the database, and which by application code — and why did you draw the line there?
-- What did you deliberately denormalise?
-- What would break first if this had 100x the data?
+## Which constraints are enforced by the database, and which by application code — and why did you draw the line there?
+## What did you deliberately denormalise?
+## What would break first if this had 100x the data?

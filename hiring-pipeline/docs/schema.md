@@ -64,6 +64,7 @@ Represents a candidate applying to a particular job opening.
 | source | VARCHAR | Application source |
 | notes | TEXT | Recruiter notes |
 | current_stage | ENUM | Current pipeline stage |
+| rejected_from_stage | ENUM | Stage the application was in before rejection |
 | stage_entered_at | TIMESTAMP | Time when the current stage started |
 | created_at | TIMESTAMP | Application creation time |
 | updated_at | TIMESTAMP | Last update time |
@@ -235,5 +236,5 @@ application_interviewers
 ```
 
 ## Which constraints are enforced by the database, and which by application code — and why did you draw the line there?
-## What did you deliberately denormalise?
+##  What did you deliberately denormalise?
 ## What would break first if this had 100x the data?

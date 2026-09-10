@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 
         if (!passwordMatches) {
             return NextResponse.json(
-                { error: "Invalid email or password" },
+                { error: "Invalid password" },
                 { status: 401 }
             );
         }

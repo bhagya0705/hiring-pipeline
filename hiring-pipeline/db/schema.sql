@@ -94,7 +94,10 @@ CREATE TABLE applications (
 
     CONSTRAINT fk_application_job
         FOREIGN KEY (job_opening_id)
-        REFERENCES job_openings(id)
+        REFERENCES job_openings(id),
+
+    CONSTRAINT unique_candidate_job
+        UNIQUE (candidate_id, job_opening_id)
 );
 
 CREATE TABLE application_interviewers (

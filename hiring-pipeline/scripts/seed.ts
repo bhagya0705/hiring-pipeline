@@ -3,24 +3,24 @@ import bcrypt from "bcryptjs";
 import { pool } from "../db/db.js";
 
 const users = [
-    {
-        name: "Demo Recruiter",
-        email: "recruiter@example.com",
-        password: "recruiter123",
-        role: "RECRUITER",
-    },
+    // {
+    //     name: "Demo Recruiter",
+    //     email: "recruiter@example.com",
+    //     password: "recruiter123",
+    //     role: "RECRUITER",
+    // },
     {
         name: "Demo Interviewer",
         email: "interviewer1@example.com",
         password: "interviewer123",
         role: "INTERVIEWER",
-    },
-    {
-        name: "Second Interviewer",
-        email: "interviewer2@example.com",
-        password: "interviewer123",
-        role: "INTERVIEWER",
-    },
+    }
+    // {
+    //     name: "Second Interviewer",
+    //     email: "interviewer2@example.com",
+    //     password: "interviewer123",
+    //     role: "INTERVIEWER",
+    // },
 ];
 
 async function seed() {

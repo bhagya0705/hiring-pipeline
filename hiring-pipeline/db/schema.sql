@@ -27,6 +27,7 @@ CREATE TYPE application_event_type AS ENUM (
     'FEEDBACK_ADDED',
     'INTERVIEW_SCHEDULED',
     'INTERVIEWER_ASSIGNED',
+    'INTERVIEW_RESCHEDULED',
     'INTERVIEWER_REMOVED'
 );
 
@@ -119,12 +120,10 @@ CREATE TABLE application_interviewers (
 
 CREATE TABLE interviews (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-
     application_id UUID NOT NULL,
     scheduled_at TIMESTAMPTZ NOT NULL,
     duration_minutes INTEGER NOT NULL,
     created_by UUID NOT NULL,
-
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
     CONSTRAINT fk_interview_application
@@ -132,12 +131,15 @@ CREATE TABLE interviews (
         REFERENCES applications(id)
         ON DELETE CASCADE,
 
-    CONSTRAINT fk_interview_creator
+    CONSTRAINT fk_interview_created_by
         FOREIGN KEY (created_by)
         REFERENCES users(id),
 
-    CONSTRAINT chk_interview_duration
-        CHECK (duration_minutes > 0)
+    CONSTRAINT positive_duration
+        CHECK (duration_minutes > 0),
+
+    CONSTRAINT unique_application_interview
+        UNIQUE (application_id)
 );
 
 CREATE TABLE feedback (
@@ -161,7 +163,10 @@ CREATE TABLE feedback (
         REFERENCES users(id),
 
     CONSTRAINT chk_feedback_rating
-        CHECK (rating BETWEEN 1 AND 5)
+        CHECK (rating BETWEEN 1 AND 5),
+
+    CONSTRAINT unique_application_interviewer_feedback
+        UNIQUE (application_id, interviewer_id)
 );
 
 CREATE TABLE application_events (

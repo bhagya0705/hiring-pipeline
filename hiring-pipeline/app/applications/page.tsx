@@ -469,6 +469,15 @@ function ApplicationsPage() {
 
                 {/* Results */}
                 <section className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div className="border-b border-slate-100 bg-white px-5 py-4">
+                        <p className="text-sm font-semibold text-slate-800">
+                            Select one or more candidates for bulk operation
+                        </p>
+                        <p className="mt-1 text-xs text-slate-400">
+                            Select candidates below to advance or reject them together.
+                        </p>
+                    </div>
+
                     {selectedApplicationIds.length > 0 && (
                         <div className="flex flex-col gap-3 border-b border-indigo-100 bg-indigo-50/60 px-5 py-3 sm:flex-row sm:items-center sm:justify-between">
                             <p className="text-sm font-medium text-indigo-700">

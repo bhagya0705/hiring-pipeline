@@ -21,7 +21,6 @@ below, not necessarily the last one; add a **Later reversed:** line to whichever
 
 - **Why:** The same candidate may apply to multiple job openings. Keeping candidate information separate avoids unnecessarily duplicating the candidate's identity and allows multiple applications to belong to the same candidate.
 
-
 ## Decision 3
 
 - **Chose:** Use PostgreSQL with the `pg` package for database access.
@@ -47,3 +46,19 @@ below, not necessarily the last one; add a **Later reversed:** line to whichever
 - **Rejected:** Store only the application's current state or allow previous timeline entries to be edited when the application changes.
 
 - **Why:** The assignment requires an immutable application timeline showing important actions and who performed them. Keeping events as separate records preserves the history of stage changes, rejection/reinstatement, interviewer assignments, interviews, and feedback without allowing past events to be overwritten.
+
+## Decision 6
+
+- **Chose:** Use server-side filtering, sorting, searching, and pagination for applications.
+
+- **Rejected:** Fetch all applications to the browser and perform filtering, sorting, and pagination on the client.
+
+- **Why:** The assignment explicitly requires these operations to be server-side. Keeping the operations in the API also means the browser only receives the requested page of results and the server can apply authorization before returning application data.
+
+## Decision 7
+
+- **Chose:** Use HTTP-only session cookies with server-side session validation for authentication.
+
+- **Rejected:** Store authentication information such as the session token in browser-accessible storage and rely on the client to determine the user's role.
+
+- **Why:** Authentication and authorization are security-sensitive operations. Keeping the session in an HTTP-only cookie prevents client-side JavaScript from directly reading the session identifier, while checking the session and role on the server ensures protected operations cannot be bypassed by modifying frontend state or requests.

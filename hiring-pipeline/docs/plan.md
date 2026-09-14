@@ -2,7 +2,7 @@
 
 ## How did you break the work into sessions?
 
-I broke the work into small sessions, focusing on the required backend functionality first and leaving the frontend, deployment, and final documentation for later.
+I broke the work into small sessions, focusing first on the application foundation and required backend functionality, then building the frontend, testing, and deployment around the completed APIs.
 
 ### Session 1 — Planning and database design
 
@@ -51,21 +51,22 @@ I broke the work into small sessions, focusing on the required backend functiona
 - Implement recruiter dismissal of stalled alerts.
 - Verify that an application can become eligible for a new stalled alert after moving to a new stage.
 
-### Session 7 — Final backend review and documentation
-
-- Verify that all ten required backend goals are covered.
-- Review server-side authorization and important edge cases.
-- Update the project documentation to reflect the implementation and design decisions.
-- Review and organize the remaining Git changes.
-
-### Session 8 — Frontend, testing and deployment
+### Session 7 — Frontend implementation and integration
 
 - Build the frontend around the completed backend APIs.
-- Connect the UI to the authentication, application, pipeline, interview, dashboard, and alert APIs.
-- Add/verify seed data and demo credentials.
-- Perform final end-to-end testing.
+- Connect the UI to authentication, jobs, applications, pipeline, interview, dashboard, and alert APIs.
+- Implement role-aware UI behavior while keeping server-side authorization as the source of access control.
+- Add application search, filters, pagination, bulk actions, CSV export, and application detail workflows.
+- Add job creation, editing, archiving, and restoration interfaces.
+
+### Session 8 — Final testing, review, and deployment
+
+- Verify seed data and demo credentials.
+- Perform final end-to-end testing of the required workflows.
+- Review server-side authorization and important edge cases.
+- Review the codebase for readability and maintainability.
 - Deploy the application.
-- Complete the final submission documentation.
+- Update the final submission documentation with the live URL, credentials, checklist, and final reflection.
 
 ---
 
@@ -74,16 +75,24 @@ I broke the work into small sessions, focusing on the required backend functiona
 I built from the foundation toward features that depend on it.
 
 1. **Project setup and database** — The rest of the application depends on the project structure and database model.
-2. **Authentication and roles** — Access control needs to exist before implementing recruiter/interviewer-specific functionality.
-3. **Jobs, candidates, and applications** — These are the core entities of the hiring system.
-4. **Pipeline and timeline** — The hiring workflow and history depend on applications existing first.
-5. **Interviewers, interviews, and feedback** — These features operate on existing applications and users.
-6. **Search, filtering, pagination, bulk actions, and CSV export** — These are application-management features built on top of the core workflow.
-7. **Dashboard and stalled alerts** — These depend on application, stage, interview, and event data.
-8. **Frontend and final testing** — The frontend is being built after the backend API contract and business rules are established, so the UI can be designed around the actual backend.
-9. **Deployment and final submission** — These are completed after the application and documentation are ready.
 
-This order reduced dependencies and allowed the required backend workflow to be completed before moving to the frontend.
+2. **Authentication and roles** — Access control needs to exist before implementing recruiter/interviewer-specific functionality.
+
+3. **Jobs, candidates, and applications** — These are the core entities of the hiring system.
+
+4. **Pipeline and timeline** — The hiring workflow and history depend on applications existing first.
+
+5. **Interviewers, interviews, and feedback** — These features operate on existing applications and users.
+
+6. **Search, filtering, pagination, bulk actions, and CSV export** — These are application-management features built on top of the core workflow.
+
+7. **Dashboard and stalled alerts** — These depend on application, stage, interview, and event data.
+
+8. **Frontend and integration** — The frontend was built around the completed backend API contracts and business rules, allowing the UI to use the actual implemented workflows.
+
+9. **Testing and deployment** — Final testing and deployment are performed after the application functionality and documentation are ready.
+
+This order reduced dependencies and allowed the core backend business rules to be established before the frontend was connected to them.
 
 ## What did you estimate versus what it actually took?
 

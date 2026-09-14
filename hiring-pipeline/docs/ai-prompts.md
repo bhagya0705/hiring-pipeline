@@ -110,3 +110,51 @@ I changed the dismissal insert to copy the exact `stage` and `stage_entered_at` 
 6. The application becomes eligible for a new stalled alert.
 
 This was an example where I used AI to review the implementation but verified and corrected the result myself.
+
+---
+
+## Frontend implementation
+
+### Prompt
+
+"Using the existing hiring pipeline backend APIs, help me build the frontend in Next.js and Tailwind CSS. Keep the existing API contracts and server-side authorization unchanged. Build the UI for jobs, applications, application details, pipeline actions, interviewer assignment, interviews, feedback, dashboard, search/filtering, pagination, bulk actions, CSV export, and stalled alerts. Keep the UI consistent across recruiter and interviewer roles, while allowing the server to enforce permissions."
+
+### What I got
+
+AI helped generate and structure the frontend components and pages around the existing API endpoints. It helped connect forms, buttons, filters, tables, modals, loading states, error states, and API requests to the backend functionality.
+
+### What I decided
+
+I used the existing backend API behavior as the source of truth and reviewed the generated frontend code against the assignment requirements. I tested the important user flows and corrected issues where the generated implementation did not behave as required.
+
+---
+
+## Frontend debugging and refinement
+
+### Prompt
+
+"Review the application frontend against the existing API behavior and identify issues that could cause incorrect UI behavior, stale state, incorrect filtering, missing error messages, or failures when an API request is rejected. Do not change the backend contract."
+
+### What I got
+
+AI identified frontend issues involving state updates, API request handling, filtering behavior, and displaying errors from rejected operations.
+
+### What I changed
+
+I applied and tested the necessary fixes rather than accepting the generated code blindly. For example, application search was adjusted so that submitting a search reliably triggers a new server-side request instead of depending on a stale state value.
+
+---
+
+## Frontend code quality review
+
+### Prompt
+
+"Review the completed frontend for readability and maintainability. Identify large components, duplicated logic, unnecessary state, weak TypeScript typing, and UI code that could be simplified without changing functionality."
+
+### What I got
+
+AI identified areas where the frontend could be refactored, particularly large application-related components and repeated state/API handling.
+
+### What I decided
+
+I treated these recommendations as a review rather than automatically changing everything. The goal was to improve structure without changing the behavior of the completed assignment.

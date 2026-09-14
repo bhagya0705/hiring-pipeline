@@ -90,8 +90,7 @@ export async function GET(request: Request) {
         ) {
             return NextResponse.json(
                 {
-                    error:
-                        "Status must be OPEN, ARCHIVED, or ALL",
+                    error: "Status must be OPEN, ARCHIVED, or ALL",
                 },
                 { status: 400 }
             );

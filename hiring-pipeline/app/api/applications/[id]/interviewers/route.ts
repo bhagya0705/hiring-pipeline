@@ -1,6 +1,118 @@
 import { NextResponse } from "next/server";
-import { requireRole } from "@/lib/auth";
+import { requireRole, getCurrentUser } from "@/lib/auth";
 import { pool } from "@/db/db";
+
+export async function GET(
+    request: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const user = await getCurrentUser();
+
+        if (!user) {
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 401 }
+            );
+        }
+
+        const { id: applicationId } = await params;
+
+        // Check that the application exists
+        const applicationResult = await pool.query(
+            `
+            SELECT id
+            FROM applications
+            WHERE id = $1
+            `,
+            [applicationId]
+        );
+
+        if (applicationResult.rows.length === 0) {
+            return NextResponse.json(
+                { error: "Application not found" },
+                { status: 404 }
+            );
+        }
+
+        // Interviewers can only view their own assignment
+        // through this endpoint.
+        if (user.role === "INTERVIEWER") {
+            const assignmentResult = await pool.query(
+                `
+                SELECT
+                    users.id,
+                    users.name,
+                    users.email
+                FROM application_interviewers
+                JOIN users
+                    ON users.id = application_interviewers.interviewer_id
+                WHERE application_interviewers.application_id = $1
+                  AND users.id = $2
+                `,
+                [applicationId, user.id]
+            );
+
+            return NextResponse.json({
+                interviewers: assignmentResult.rows,
+            });
+        }
+
+        // Recruiters can see all assigned interviewers
+        // Recruiters can see assigned interviewers
+        const result = await pool.query(
+            `
+    SELECT
+        users.id,
+        users.name,
+        users.email,
+        users.role,
+        application_interviewers.assigned_at
+    FROM application_interviewers
+    JOIN users
+        ON users.id = application_interviewers.interviewer_id
+    WHERE application_interviewers.application_id = $1
+    ORDER BY application_interviewers.assigned_at ASC
+    `,
+            [applicationId]
+        );
+
+        // Also fetch interviewer users who are not yet assigned
+        const availableResult = await pool.query(
+            `
+    SELECT
+        users.id,
+        users.name,
+        users.email,
+        users.role
+    FROM users
+    WHERE users.role = 'INTERVIEWER'
+      AND users.id NOT IN (
+          SELECT interviewer_id
+          FROM application_interviewers
+          WHERE application_id = $1
+      )
+    ORDER BY users.name ASC
+    `,
+            [applicationId]
+        );
+
+        return NextResponse.json({
+            interviewers: result.rows,
+            availableInterviewers: availableResult.rows,
+        });
+    } catch (error) {
+        console.error(
+            "Get application interviewers failed:",
+            error
+        );
+
+        return NextResponse.json(
+            { error: "Something went wrong" },
+            { status: 500 }
+        );
+    }
+}
 
 export async function POST(
     request: Request,

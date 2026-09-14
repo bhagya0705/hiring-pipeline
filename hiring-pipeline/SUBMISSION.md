@@ -4,8 +4,8 @@ Fill this in and commit it. This is the first file we open.
 
 ## Links
 
-- **GitHub repository:** [<public repo URL>](https://github.com/bhagya0705/hiring-pipeline)
-- **Live application:** [<deployed URL>](https://hiring-pipeline-nine.vercel.app/)
+- **GitHub repository:** https://github.com/bhagya0705/hiring-pipeline
+- **Live application:** https://hiring-pipeline-nine.vercel.app/
 
 ## Notes for the reviewer
 

@@ -117,11 +117,28 @@ export default function ApplicationDetailPage() {
     const [editingApplication, setEditingApplication] = useState(false);
 
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [loadError, setLoadError] = useState("");
+
+    const [rescheduleError, setRescheduleError] = useState("");
+    const [rescheduleMessage, setRescheduleMessage] = useState("");
+
+    const [assignError, setAssignError] = useState("");
+    const [assignMessage, setAssignMessage] = useState("");
+
+    const [scheduleError, setScheduleError] = useState("");
+    const [scheduleMessage, setScheduleMessage] = useState("");
+
+    const [stageError, setStageError] = useState("");
+    const [stageMessage, setStageMessage] = useState("");
+
+    const [feedbackError, setFeedbackError] = useState("");
+    const [feedbackMessage, setFeedbackMessage] = useState("");
+
+    const [editError, setEditError] = useState("");
+    const [editMessage, setEditMessage] = useState("");
+
     const [actionLoading, setActionLoading] = useState(false);
-    const [actionError, setActionError] = useState("");
     const [selectedStage, setSelectedStage] = useState("");
-    const [actionMessage, setActionMessage] = useState("");
     const [showRejectConfirm, setShowRejectConfirm] = useState(false);
 
     useEffect(() => {
@@ -199,7 +216,7 @@ export default function ApplicationDetailPage() {
                     );
                 }
             } catch (err) {
-                setError(
+                setLoadError(
                     err instanceof Error
                         ? err.message
                         : "Unable to load application."
@@ -216,9 +233,8 @@ export default function ApplicationDetailPage() {
         if (!application || actionLoading) return;
 
         setActionLoading(true);
-        setError("");
-        setActionError("");
-        setActionMessage("");
+        setStageError("");
+        setStageMessage("");
 
         try {
             const response = await fetch(
@@ -268,11 +284,11 @@ export default function ApplicationDetailPage() {
                 );
             }
 
-            setActionMessage(
+            setStageMessage(
                 data.message || "Application updated successfully."
             );
         } catch (err) {
-            setActionError(
+            setStageError(
                 err instanceof Error
                     ? err.message
                     : "Unable to update application."
@@ -286,7 +302,8 @@ export default function ApplicationDetailPage() {
         if (!interviews[0]) return;
 
         setReschedulingInterview(true);
-        setError("");
+        setRescheduleError("");
+        setRescheduleMessage("");
 
         try {
             const scheduledAt = new Date(
@@ -322,9 +339,9 @@ export default function ApplicationDetailPage() {
             );
 
             setShowRescheduleModal(false);
-            setActionMessage("Interview rescheduled successfully.");
+            setRescheduleMessage("Interview rescheduled successfully.");
         } catch (err) {
-            setError(
+            setRescheduleError(
                 err instanceof Error
                     ? err.message
                     : "Failed to reschedule interview"
@@ -337,8 +354,8 @@ export default function ApplicationDetailPage() {
         if (!application) return;
 
         setSubmittingFeedback(true);
-        setError("");
-        setActionError("");
+        setFeedbackError("");
+        setFeedbackMessage("");
 
         try {
             const response = await fetch(
@@ -375,9 +392,9 @@ export default function ApplicationDetailPage() {
 
                 setTimeline(timelineData.timeline ?? []);
             }
-            setActionMessage("Feedback submitted successfully.");
+            setFeedbackMessage("Feedback submitted successfully.");
         } catch (err) {
-            setActionError(
+            setFeedbackError(
                 err instanceof Error
                     ? err.message
                     : "Failed to submit feedback"
@@ -391,7 +408,8 @@ export default function ApplicationDetailPage() {
         if (!application) return;
 
         setEditingApplication(true);
-        setActionError("");
+        setEditError("");
+        setEditMessage("");
 
         try {
             const response = await fetch(
@@ -442,16 +460,15 @@ export default function ApplicationDetailPage() {
             );
 
             setShowEditModal(false);
-            setActionMessage("Application updated successfully.");
+            setEditMessage("Application updated successfully.");
         } catch (err) {
-            setActionError(
+            setEditError(
                 err instanceof Error
                     ? err.message
                     : "Unable to update application."
             );
         } finally {
             setEditingApplication(false);
-            setShowEditModal(false);
         }
     };
 
@@ -461,8 +478,8 @@ export default function ApplicationDetailPage() {
         }
 
         setAssigningInterviewers(true);
-        setError("");
-        setActionMessage("");
+        setAssignError("");
+        setAssignMessage("");
 
         try {
             const response = await fetch(
@@ -509,11 +526,11 @@ export default function ApplicationDetailPage() {
             setSelectedInterviewerIds([]);
             setShowAssignModal(false);
 
-            setActionMessage(
+            setAssignMessage(
                 data.message || "Interviewers assigned successfully."
             );
         } catch (err) {
-            setError(
+            setAssignError(
                 err instanceof Error
                     ? err.message
                     : "Unable to assign interviewers."
@@ -525,13 +542,13 @@ export default function ApplicationDetailPage() {
 
     async function scheduleInterview() {
         if (!scheduledAt) {
-            setError("Please select an interview date and time.");
+            setScheduleError("Please select an interview date and time.");
             return;
         }
 
         setSchedulingInterview(true);
-        setActionError("");
-        setActionMessage("");
+        setScheduleError("");
+        setScheduleMessage("");
 
         try {
             const response = await fetch(
@@ -562,18 +579,17 @@ export default function ApplicationDetailPage() {
             setDurationMinutes("60");
             setShowScheduleModal(false);
 
-            setActionMessage(
+            setScheduleMessage(
                 data.message || "Interview scheduled successfully."
             );
         } catch (err) {
-            setActionError(
+            setScheduleError(
                 err instanceof Error
                     ? err.message
                     : "Unable to schedule interview."
             );
         } finally {
             setSchedulingInterview(false);
-            setShowScheduleModal(false);
         }
     }
 
@@ -589,7 +605,7 @@ export default function ApplicationDetailPage() {
         );
     }
 
-    if (error || !application || !user) {
+    if (loadError || !application || !user) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-slate-50 p-6">
                 <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
@@ -598,7 +614,7 @@ export default function ApplicationDetailPage() {
                     </h1>
 
                     <p className="mt-2 text-sm text-slate-500">
-                        {error || "This application could not be found."}
+                        {loadError || "This application could not be found."}
                     </p>
 
                     <Link
@@ -617,12 +633,6 @@ export default function ApplicationDetailPage() {
     const currentStageIndex = pipelineStages.indexOf(
         application.current_stage
     );
-
-    const nextStage =
-        currentStageIndex >= 0 &&
-            currentStageIndex < pipelineStages.length - 1
-            ? pipelineStages[currentStageIndex + 1]
-            : null;
 
     return (
         <AppShell userName={user.name} userRole={user.role}>
@@ -703,7 +713,7 @@ export default function ApplicationDetailPage() {
                                 Edit application
                             </button>
 
-                            {actionError && (
+                            {editError && (
                                 <div className="mb-4 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
                                     <span className="mt-0.5">⚠️</span>
 
@@ -712,11 +722,17 @@ export default function ApplicationDetailPage() {
                                             Unable to update application
                                         </p>
                                         <p className="mt-1 text-sm text-amber-700">
-                                            {actionError === "Forbidden"
+                                            {editError === "Forbidden"
                                                 ? "You don't have permission to edit this application."
-                                                : actionError}
+                                                : editError}
                                         </p>
                                     </div>
+                                </div>
+                            )}
+
+                            {editMessage && (
+                                <div className="mb-4 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                                    {editMessage}
                                 </div>
                             )}
                         </div>
@@ -890,23 +906,19 @@ export default function ApplicationDetailPage() {
                         </div>
                     </div>
 
-                    {actionMessage && (
+                    {stageMessage && (
                         <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                            {actionMessage}
+                            {stageMessage}
                         </div>
                     )}
 
-                    {actionError && (
+                    {stageError && (
                         <div className="mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
-                            {actionError}
+                            {stageError}
                         </div>
                     )}
 
-                    {error && (
-                        <div className="mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
-                            {error}
-                        </div>
-                    )}
+                
                 </section>
 
                 {/* Information grid */}
@@ -1060,18 +1072,9 @@ export default function ApplicationDetailPage() {
                                 <h2 className="text-sm font-semibold text-slate-950">
                                     Interview
                                 </h2>
-                                {actionError && (
-                                    <div className="mt-4 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
-                                        <span className="text-lg">⚠️</span>
-
-                                        <div>
-                                            <p className="text-sm font-semibold text-amber-900">
-                                                Only recruiter can schedule
-                                            </p>
-                                            <p className="mt-1 text-sm text-amber-700">
-                                                {actionError}
-                                            </p>
-                                        </div>
+                                {scheduleMessage && (
+                                    <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                                        {scheduleMessage}
                                     </div>
                                 )}
 
@@ -1093,6 +1096,12 @@ export default function ApplicationDetailPage() {
                         </div>
 
                         <div className="mt-5">
+                            {rescheduleMessage && (
+                                <div className="mb-4 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                                    {rescheduleMessage}
+                                </div>
+                            )}
+
                             {interviews.length > 0 ? (
                                 <div className="rounded-xl border border-slate-100 bg-slate-50/60 p-4">
                                     <div className="flex items-start justify-between gap-4">
@@ -1333,9 +1342,9 @@ export default function ApplicationDetailPage() {
                             </div>
                         </div>
 
-                        {error && (
+                        {rescheduleError && (
                             <p className="mt-4 text-sm text-red-600">
-                                {error}
+                                {rescheduleError}
                             </p>
                         )}
 
@@ -1412,13 +1421,7 @@ export default function ApplicationDetailPage() {
                         </div>
                     </div>
 
-                    {error && (
-                        <p className="mt-4 text-sm text-red-500">
-                            {error}
-                        </p>
-                    )}
-
-                    {actionError && (
+                    {feedbackError && (
                         <div className="mb-4 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
                             <span className="mt-0.5 text-lg">⚠️</span>
 
@@ -1428,9 +1431,15 @@ export default function ApplicationDetailPage() {
                                 </p>
 
                                 <p className="mt-1 text-sm text-amber-700">
-                                    {actionError}
+                                    {feedbackError}
                                 </p>
                             </div>
+                        </div>
+                    )}
+
+                    {feedbackMessage && (
+                        <div className="mb-4 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                            {feedbackMessage}
                         </div>
                     )}
 
@@ -1462,6 +1471,11 @@ export default function ApplicationDetailPage() {
                             <p className="mt-1 text-sm text-slate-400">
                                 Update the candidate information and application details.
                             </p>
+                            {editError && (
+                                <div className="mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                    {editError}
+                                </div>
+                            )}
                         </div>
 
                         <div className="grid gap-5 sm:grid-cols-2">
@@ -1563,6 +1577,11 @@ export default function ApplicationDetailPage() {
                             <p className="mt-1 text-sm text-slate-500">
                                 Select one or more interviewers for this application.
                             </p>
+                            {assignError && (
+                                <div className="mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                    {assignError}
+                                </div>
+                            )}
                         </div>
 
                         <div className="max-h-80 overflow-y-auto px-6 py-4">
@@ -1640,6 +1659,12 @@ export default function ApplicationDetailPage() {
                                 </div>
                             )}
                         </div>
+
+                        {assignMessage && (
+                            <div className="mx-6 mb-4 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                                {assignMessage}
+                            </div>
+                        )}
 
                         <div className="flex justify-end gap-2 border-t border-slate-100 px-6 py-4">
                             <button
@@ -1724,6 +1749,14 @@ export default function ApplicationDetailPage() {
                             </div>
 
                         </div>
+
+                        {scheduleError && (
+                            <div className="mx-6 mb-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                                {scheduleError === "Forbidden"
+                                    ? "Only a recruiter can schedule an interview."
+                                    : scheduleError}
+                            </div>
+                        )}
 
                         <div className="flex justify-end gap-2 border-t border-slate-100 px-6 py-4">
                             <button
